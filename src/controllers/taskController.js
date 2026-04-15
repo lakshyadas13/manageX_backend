@@ -55,6 +55,10 @@ const buildTaskPayload = (body, isUpdate = false) => {
     payload.tags = normalizeTags(body.tags);
   }
 
+  if (!isUpdate || body.assignedTo !== undefined) {
+    payload.assignedTo = body.assignedTo || null;
+  }
+
   return payload;
 };
 
@@ -79,7 +83,7 @@ const getTasks = async (req, res, next) => {
     const { priority, completed, tags, sort = 'dueDateAsc' } = req.query;
 
     const filter = {
-      userId: req.user.id
+      $or: [{ userId: req.user.id }, { assignedTo: req.user.id }]
     };
 
     if (priority) {
@@ -133,7 +137,7 @@ const updateTask = async (req, res, next) => {
     const { id } = req.params;
     const updatePayload = buildTaskPayload(req.body, true);
 
-    const task = await Task.findOneAndUpdate({ _id: id, userId: req.user.id }, updatePayload, {
+    const task = await Task.findOneAndUpdate({ _id: id, $or: [{ userId: req.user.id }, { assignedTo: req.user.id }] }, updatePayload, {
       new: true,
       runValidators: true
     });
@@ -154,7 +158,7 @@ const updateTask = async (req, res, next) => {
 const deleteTask = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const task = await Task.findOneAndDelete({ _id: id, userId: req.user.id });
+    const task = await Task.findOneAndDelete({ _id: id, $or: [{ userId: req.user.id }, { assignedTo: req.user.id }] });
 
     if (!task) {
       return res.status(404).json({ message: 'Task not found' });

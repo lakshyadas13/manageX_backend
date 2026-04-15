@@ -6,6 +6,7 @@ const authRoutes = require('./routes/authRoutes');
 const taskRoutes = require('./routes/taskRoutes');
 const quotesRoutes = require('./routes/quotesRoutes');
 const weatherRoutes = require('./routes/weatherRoutes');
+const userRoutes = require('./routes/userRoutes');
 const errorHandler = require('./middleware/errorHandler');
 
 require('dotenv').config({ path: require('path').resolve(__dirname, '../.env') });
@@ -32,6 +33,7 @@ app.get('/health', (_req, res) => {
 });
 
 app.use('/auth', authRoutes);
+app.use('/api/users', userRoutes);
 app.use('/api/quotes', quotesRoutes);
 app.use('/api/weather', weatherRoutes);
 app.use('/', taskRoutes);
