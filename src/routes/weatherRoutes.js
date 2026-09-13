@@ -3,7 +3,11 @@ const router = express.Router();
 
 router.get('/', async (req, res, next) => {
   try {
-    const city = req.query.city || 'London'; // Default fallback
+    const location =
+      req.query.lat && req.query.lon
+        ? `${req.query.lat},${req.query.lon}`
+        : req.query.city || 'Delhi, India';
+    console.log(`[Weather API] Querying weather for: ${location} (${req.query.lat && req.query.lon ? 'Coordinates' : 'City/Default'})`);
     const apiKey = process.env.WEATHER_API_KEY || process.env.VITE_WEATHER_API_KEY;
     
     if (!apiKey) {
@@ -11,7 +15,9 @@ router.get('/', async (req, res, next) => {
       return res.status(500).json({ error: 'Weather API key is not configured in .env' });
     }
 
-    const response = await fetch(`https://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${encodeURIComponent(city)}`);
+    const response = await fetch(
+      `https://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${encodeURIComponent(location)}`
+    );
     
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));

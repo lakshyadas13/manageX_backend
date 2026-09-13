@@ -37,6 +37,7 @@ app.use('/api/users', userRoutes);
 app.use('/api/quotes', quotesRoutes);
 app.use('/api/weather', weatherRoutes);
 app.use('/', taskRoutes);
+app.use('/api', taskRoutes);
 
 app.use(errorHandler);
 

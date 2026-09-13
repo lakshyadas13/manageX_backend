@@ -14,6 +14,12 @@ const taskSchema = new mongoose.Schema(
       default: null,
       index: true
     },
+    collaborators: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+      }
+    ],
     title: {
       type: String,
       required: [true, 'Task title is required'],
@@ -54,6 +60,10 @@ const taskSchema = new mongoose.Schema(
     createdAt: {
       type: Date,
       default: Date.now
+    },
+    completedAt: {
+      type: Date,
+      default: null
     }
   },
   {
