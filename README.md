@@ -1,6 +1,7 @@
 # ManageX Backend
 
 Express and MongoDB API for ManageX with JWT authentication.
+
 [![Live API](https://img.shields.io/badge/LIVE%20API-MANAGEX-2F80B7?style=for-the-badge)](https://managex-backend.onrender.com)
 
 ## Stack
